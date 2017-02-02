@@ -45,30 +45,25 @@ while x <= 8: # if x is on the top line
         x += 1
     else: # if the number is in the line, it's not a possible.
         x += 1 # so just move on to the next one
-
+print("----------------------------------------")
+print("----------------------------------------")
+while x <= 17: # if x is on the second line
+    l = h
+    h += 8
+    print(h)
+    x += 1
 # Now we need to find out where to add these to.
 #del puzzle[x]  # delete that piece
 #puzzle.insert(x, range(1,10)) # then insert the range of numbers it could be (1 - 9)
-
+print("----------------------------------------")
 print("the following are possible numbers for the gaps at the top:")
 print(possibles)
 print("----------------------------------------")
-while note[y] <= 8: # so; this is to make sure we're not going beyond the top line
+while note[y] <= 9: # so; this is to make sure we're not going beyond the top line
+    l = 0
+    h = 9
     del puzzle[note[y]]  # delete that piece
     puzzle.insert(note[y], possibles) # then insert the range of numbers it could be
     print("the following location has been amended: " + str(note[y]))
-    print(puzzle)
+    print("the top line now looks like: " + str(puzzle[l:h]))
     y += 1
-y = 0
-z = 0
-print(len(puzzle))
-print(puzzle)
-print("----------------------------------------")
-print(note)
-print("----------------------------------------")
-while x <= (9*9)-1: # This just tells it when to stop looping
-    y = x + 9 # created y as a counter
-    print(puzzle[x:y]) # The actual print command
-    x += 9 # Go to the next line
-x = 0 # reset our counters
-y = 0 # reset our counters
