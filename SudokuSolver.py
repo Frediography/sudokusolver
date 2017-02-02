@@ -3,6 +3,7 @@ puzzle = list("00007906500000300200506009334005010600000000060802005995001060070
 n = range(1,10) # Set the range of numbers we are looking for (1 - 9)
 note = [] # empty list to note the places that we find blanks
 possibles = [] # create an empty list of possibles that we'll use throughout
+
 # Define a variable that we can use to count iterations throughout
 x = 0
 # Print the puzzle in a nice format:
@@ -11,8 +12,10 @@ while x <= (9*9)-1: # This just tells it when to stop looping
     y = x + 9 # created y as a counter
     print(puzzle[x:y]) # The actual print command
     x += 9 # Go to the next line
+print("- " * 100)
 x = 0 # reset our counters
 y = 0 # reset our counters
+
 # Then; ask the user what the blanks are represented as, and make it a variable:
 b = "0" # Use the following for input: input("What are the blank spaces represented as in this puzzle? ")
 # Let's find the blanks and put all possible integers in, before starting to look at other numbers
@@ -24,46 +27,48 @@ while x <= (9*9)-1: # same loop as earlier
         x += 1 # add 1 to x to continue the loop
     else:
         x += 1 # else, skip that space and move to the next one
-x = 0 # reset the counters used
-y = 0 # reset the counters used
-
-print("----------------------------------------")
-print("Blanks at locations (of note): ")
+# - Print out the numbers that have been found to be blanks:
+print("Blanks are at the following locations, and under variable 'note': ")
 print(note)
-print("----------------------------------------")
+print("- " * 100)
 
-#    while note != []: # This function keeps iterating until we have no unknowns left.
+#### Print out again
+#### Print out again
+#### Print out again
+#### Print out again - puzzle should be the same with blanks replaced w/ arrays
+""" print("The puzzle now looks like: ")
+x = 0
+while x <= (9*9)-1: # This just tells it when to stop looping
+    y = x + 9 # created y as a counter
+    print(puzzle[x:y]) # The actual print command
+    x += 9 # Go to the next line
+print("- " * 100)"""
 
-# Function to take out numbers that are on the horizontal
-l = 0 # define a variable for the lower of the range
-h = 0 # define a variable for the higher of the range
-while x <= 8: # if x is on the top line
-    l = 0
-    h = 8
-    if str(n[x]) not in puzzle[l:h]: # if the number isn't in the line, it's a possible
-        possibles.append(n[x])
-        x += 1
-    else: # if the number is in the line, it's not a possible.
-        x += 1 # so just move on to the next one
-print("----------------------------------------")
-print("----------------------------------------")
-while x <= 17: # if x is on the second line
-    l = h
-    h += 8
-    print(h)
-    x += 1
-# Now we need to find out where to add these to.
-#del puzzle[x]  # delete that piece
-#puzzle.insert(x, range(1,10)) # then insert the range of numbers it could be (1 - 9)
-print("----------------------------------------")
-print("the following are possible numbers for the gaps at the top:")
-print(possibles)
-print("----------------------------------------")
-while note[y] <= 9: # so; this is to make sure we're not going beyond the top line
-    l = 0
-    h = 9
-    del puzzle[note[y]]  # delete that piece
-    puzzle.insert(note[y], possibles) # then insert the range of numbers it could be
-    print("the following location has been amended: " + str(note[y]))
-    print("the top line now looks like: " + str(puzzle[l:h]))
-    y += 1
+# Function to find the numbers that could be on each blank on the horizontal (based just on that line)
+def horicheck(x):
+    l = x # define a variable for the Lower of the range
+    h = l + 8 # define a variable for the Higher of the range
+    while x <= h: # if x is on the top line
+        if str(n[x]) not in puzzle[l:h]: # if the number isn't in the line, it's a possible
+            possibles.append(n[x])
+            x += 1
+        else: # if the number is in the line, it's not a possible.
+            x += 1 # so just move on to the next one
+
+# Function to add the numbers onto the line that we have found
+def horiadd(x):
+    l = x # Lower - set the boundaries again
+    h = l + 8 # Higher boundary
+    while note[l] <= h:
+        del puzzle[note[l]]  # delete that piece
+        puzzle.insert(note[l], possibles) # then insert the range of numbers it could be
+        print("the following location has been amended: " + str(note[l]) + " with the following string: " + str(possibles))
+        l += 1
+
+# Now execute the functions:
+x = 0
+horicheck(x)
+print("The following numbers are 'possibles' on line " + str(x) + " (based only on this row): " + str(possibles))
+print("- " * 100)
+horiadd(x)
+print("- " * 100)
