@@ -59,17 +59,12 @@ def horiadd(x, l):
 # Now execute the functions:
 x = 0
 e = x
-horicheck(x)
-horiadd(x, e)
-possibles = [] #clear out this stream
-x += 9
-print("- " * 100)
-horicheck(x)
-e = int(note.index(x))
-horiadd(x, e)
-possibles = [] #clear out this stream
-print("- " * 100)
-x += 9
-horicheck(x)
-e = int(note.index(x))
-horiadd(x, e)
+while x < 91:
+    horicheck(x)
+    horiadd(x, e)
+    possibles =[]
+    x += 9
+    e = int(note.index(x))
+    d = (note[e]/9) + 1
+    print("- " * 100)
+    print("MOVING TO ROW: " + str(d))
