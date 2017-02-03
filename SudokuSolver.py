@@ -1,4 +1,5 @@
 # First - Import the puzzle as a list.
+debug = 1
 puzzle = list("000079065000003002005060093340050106000000000608020059950010600700600000820390000")
 n = range(1,10) # Set the range of numbers we are looking for (1 - 9)
 note = [] # empty list to note the places that we find blanks
@@ -10,7 +11,7 @@ x = 0
 print("You have imported the following puzzle:           The positions on the board will be referred to as:")
 while x <= (9*9)-1: # This just tells it when to stop looping
     y = x + 9 # created y as a counter
-    print(str(puzzle[x:y]) + "     " + str(range(x,y))) # The actual print command
+    print(str(x/9) + ": " +str(puzzle[x:y]) + "     " + str(range(x,y))) # The actual print command
     x += 9 # Go to the next line
 print("- " * 100)
 x = 0 # reset our counters
@@ -28,10 +29,11 @@ while x <= (9*9)-1: # same loop as earlier
     else:
         x += 1 # else, skip that space and move to the next one
 # - Print out the numbers that have been found to be blanks:
-print("Blanks are at the following locations, and under variable 'note': ")
-print(note)
-print("- " * 100)
-print("START WITH ROW 0: ")
+if debug == 1:
+    print("Blanks are at the following locations, and under variable 'note': ")
+    print(note)
+    print("- " * 100)
+    print("START WITH ROW 0: ")
 
 # Function to find the numbers that could be on each blank on the horizontal (based just on that line)
 def horicheck(l):
@@ -46,10 +48,12 @@ def horicheck(l):
         else: # if the number is in the line, it's not a possible.
             x += 1 # so just move on to the next one
             y += 1
-    print("the possibilities for this row, based just on this row, are: " + str(possibles))
+    if debug == 1:
+        print("the possibilities for this row, based just on this row, are: " + str(possibles))
 # Function to add the numbers onto the line that we have found
 def horiadd(x, l):
-    print("Lets add the possibilities to the row just analysed: ")
+    if debug == 1:
+        print("Lets add the possibilities to the row just analysed: ")
     if x + 9 > 80:
         h = 80
     else:
@@ -57,7 +61,8 @@ def horiadd(x, l):
     while note[l] < h:
         del puzzle[note[l]]  # delete that piece
         puzzle.insert(note[l], possibles) # then insert the range of numbers it could be
-        print("the following location has been amended: " + str(note[l]) + ". the following list has been added in it's place: " + str(possibles))
+        if debug == 1:
+            print("the following location has been amended: " + str(note[l]) + ". the following list has been added in it's place: " + str(possibles))
         l += 1
 
 # Now execute the functions:
@@ -75,8 +80,14 @@ while x <= 9*8:
         x += 9
         q = x
         d = (note[e]/9) + 1
-        print("- " * 100)
+        if debug == 1:
+            print("- " * 100)
         if int(d) < 9:
-            print("MOVING TO ROW: " + str(d))
+            if debug == 1:
+                print("MOVING TO ROW: " + str(d))
         else:
             break
+
+####
+#### NOW MOVE ONTO VERTICALS
+####
