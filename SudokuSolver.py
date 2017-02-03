@@ -31,6 +31,7 @@ while x <= (9*9)-1: # same loop as earlier
 print("Blanks are at the following locations, and under variable 'note': ")
 print(note)
 print("- " * 100)
+print("START WITH ROW 0: ")
 
 # Function to find the numbers that could be on each blank on the horizontal (based just on that line)
 def horicheck(l):
@@ -49,7 +50,10 @@ def horicheck(l):
 # Function to add the numbers onto the line that we have found
 def horiadd(x, l):
     print("Lets add the possibilities to the row just analysed: ")
-    h = x + 9 # Higher boundary
+    if x + 9 > 80:
+        h = 80
+    else:
+        h = x + 9 # Higher boundary
     while note[l] < h:
         del puzzle[note[l]]  # delete that piece
         puzzle.insert(note[l], possibles) # then insert the range of numbers it could be
@@ -58,13 +62,18 @@ def horiadd(x, l):
 
 # Now execute the functions:
 x = 0
+q = x
 e = x
-while x < 91:
-    horicheck(x)
-    horiadd(x, e)
-    possibles =[]
-    x += 9
-    e = int(note.index(x))
-    d = (note[e]/9) + 1
-    print("- " * 100)
-    print("MOVING TO ROW: " + str(d))
+while x <= 9*8:
+    if q not in note:
+        q += 1
+    else:
+        e = int(note.index(q))
+        horicheck(x)
+        horiadd(x, e)
+        possibles =[]
+        x += 9
+        q = x
+        d = (note[e]/9) + 1
+        print("- " * 100)
+        print("MOVING TO ROW: " + str(d))
