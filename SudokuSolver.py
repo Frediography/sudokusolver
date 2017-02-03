@@ -1,5 +1,5 @@
 # First - Import the puzzle as a list.
-debug = 1
+debug = 1 # Debug for printing! (Thanks Dom)
 puzzle = list("000079065000003002005060093340050106000000000608020059950010600700600000820390000")
 n = range(1,10) # Set the range of numbers we are looking for (1 - 9)
 note = [] # empty list to note the places that we find blanks
