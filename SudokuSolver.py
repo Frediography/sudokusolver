@@ -76,4 +76,7 @@ while x <= 9*8:
         q = x
         d = (note[e]/9) + 1
         print("- " * 100)
-        print("MOVING TO ROW: " + str(d))
+        if int(d) < 9:
+            print("MOVING TO ROW: " + str(d))
+        else:
+            break
