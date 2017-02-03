@@ -32,18 +32,6 @@ print("Blanks are at the following locations, and under variable 'note': ")
 print(note)
 print("- " * 100)
 
-#### Print out again
-#### Print out again
-#### Print out again
-#### Print out again - puzzle should be the same with blanks replaced w/ arrays
-""" print("The puzzle now looks like: ")
-x = 0
-while x <= (9*9)-1: # This just tells it when to stop looping
-    y = x + 9 # created y as a counter
-    print(puzzle[x:y]) # The actual print command
-    x += 9 # Go to the next line
-print("- " * 100)"""
-
 # Function to find the numbers that could be on each blank on the horizontal (based just on that line)
 def horicheck(l):
     x = 0 # define a variable for the counter
@@ -69,17 +57,19 @@ def horiadd(x, l):
         l += 1
 
 # Now execute the functions:
-r = 0 # use this for row/column/block numbers!
-i = 0 # use this for iteration numbers!
 x = 0
 e = x
 horicheck(x)
 horiadd(x, e)
+possibles = [] #clear out this stream
 x += 9
 print("- " * 100)
-possibles = [] #clear out this stream
-print("the next empty space is at index point: " + str(note.index(x)) + ". on our list called 'note'. I'm calling this index point 'e'.")
 horicheck(x)
 e = int(note.index(x))
 horiadd(x, e)
+possibles = [] #clear out this stream
 print("- " * 100)
+x += 9
+horicheck(x)
+e = int(note.index(x))
+horiadd(x, e)
