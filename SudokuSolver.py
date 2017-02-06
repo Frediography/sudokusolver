@@ -91,20 +91,6 @@ while x <= 9*8: # while x is in low enough to look at the rows
 ####
 #### NOW MOVE ONTO VERTICALS
 ####
-def verticheck (l):
-        x = 0 # define a variable for the counter
-        y = 1
-        while x <= 8: # to make sure we stay on one horizontal line
-            if str(y) not in puzzle[l:h]: # if the number isn't in the line, it's a possible
-                possibles.append(n[x])
-                x += 1
-                y += 1
-            else: # if the number is in the line, it's not a possible.
-                x += 1 # so just move on to the next one
-                y += 1
-        if debug == 1:
-            print("the possibilities for this row, based just on this row, are: " + str(possibles))
-
 ### This is looking at the columns/verticals
 c = 0 # this is a variable for the column number
 notpossibles = [] # create a not - possibles variable
@@ -155,9 +141,16 @@ for i in range (0, 9, 1):
                     notpossibles.append(h)
                     if debug == 1:
                         print(str(h) + " is in the puzzle at point: " + str(c + x))
+    print("The following numbers are in this block: " + str(notpossibles))
+    for x in range (1, 10, 1):
+        if x not in notpossibles: # if the number isn't in the not-possibles
+            possibles.append(x) # add the number to the possibles variable
+    print("The following numbers are therefore possibles: " + str(possibles))
+    notpossibles = []
+    possibles = []
             #
             # This is where we put the block stuff
             #
             #
-        x += 9 # jump to the next row
+    x += 9 # jump to the next row
     print("- " * 100)
