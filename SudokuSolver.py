@@ -4,7 +4,7 @@ puzzle = list("00007906500000300200506009334005010600000000060802005995001060070
 n = range(1,10) # Set the range of numbers we are looking for (1 - 9)
 note = [] # empty list to note the places that we find blanks
 possibles = [] # create an empty list of possibles that we'll use throughout
-
+notpossibles = []
 # Define a variable that we can use to count iterations throughout
 x = 0
 # Print the puzzle in a nice format:
@@ -17,26 +17,21 @@ print("- " * 100)
 x = 0 # reset our counters
 y = 0 # reset our counters
 
-# Then; ask the user what the blanks are represented as, and make it a variable:
-b = "0" # Use the following for input: input("What are the blank spaces represented as in this puzzle? ")
-# Let's find the blanks and put all possible integers in, before starting to look at other numbers
-while x <= (9*9)-1: # same loop as earlier
-    if b in puzzle[x]: # if the character for a blank is in that piece:
-        del puzzle[x]  # delete that piece
-        puzzle.insert(x, range(1,10)) # then insert the range of numbers it could be (1 - 9)
-        note.append(x)
-        x += 1 # add 1 to x to continue the loop
-    else:
-        x += 1 # else, skip that space and move to the next one
-# - Print out the numbers that have been found to be blanks:
-if debug == 1:
-    print("Blanks are at the following locations, and under variable 'note': ")
-    print(note)
-    print("- " * 100)
-    print("START WITH ROW 0: ")
+def findblanks(x):
+    # Then; ask the user what the blanks are represented as, and make it a variable:
+    b = "0" # Use the following for input: input("What are the blank spaces represented as in this puzzle? ")
+    # Let's find the blanks and put all possible integers in, before starting to look at other numbers
+    while x <= (9*9)-1: # same loop as earlier
+        if b in puzzle[x]: # if the character for a blank is in that piece:
+            del puzzle[x]  # delete that piece
+            puzzle.insert(x, range(1,10)) # then insert the range of numbers it could be (1 - 9)
+            note.append(x)
+            x += 1 # add 1 to x to continue the loop
+        else:
+            x += 1 # else, skip that space and move to the next one
 
 # Function to find the numbers that could be on each blank on the horizontal (based just on that line)
-def check(l):
+def horicheck(l):
     x = 0 # define a variable for the counter
     h = l + 9 # define a variable for the Higher of the range
     y = 1
@@ -46,10 +41,22 @@ def check(l):
             x += 1
             y += 1
         else: # if the number is in the line, it's not a possible.
+            notpossibles.append(n[x])
             x += 1 # so just move on to the next one
             y += 1
     if debug == 1:
+        print("the following numbers are not possibles for this row: " + str(notpossibles))
         print("the possibilities for this row, based just on this row, are: " + str(possibles))
+    #This is where we want to then check it compared to the column...
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    # Right here
 # Function to add the numbers onto the line that we have found
 def horiadd(x, l):
     if debug == 1:
@@ -65,7 +72,18 @@ def horiadd(x, l):
             print("the following location has been amended: " + str(note[l]) + ". the following list has been added in it's place: " + str(possibles))
         l += 1
 
+
+
+
 # Now execute the functions:
+findblanks(x)
+# - Print out the numbers that have been found to be blanks:
+if debug == 1:
+    print("Blanks are at the following locations, and under variable 'note': ")
+    print(note)
+    print("- " * 100)
+    print("START WITH ROW 0: ")
+c = 0 # reset the counter
 x = 0 # reset the counter
 e = x # e is used as the index number of the next blank in the 'note' variable
 q = x # q is used as another counter, but this time it's for the 'note' variable; so IF the number at the start of a row isn't a blank; we can check for the next number.
@@ -74,8 +92,7 @@ while x <= 9*8: # while x is in low enough to look at the rows
         q += 1 # by adding 1 to q
     else:
         e = int(note.index(q)) # use the integer!
-        check(x) # call the function defined earlier
-        horiadd(x, e) # call the other function defined earlier
+        horicheck(x) # call the function defined earlier
         possibles = [] # clear our the possible number variable each time after you've added the numbers
         x += 9 # go to the next row
         q = x # refresh q to be the number of the start of the next row
@@ -86,7 +103,7 @@ while x <= 9*8: # while x is in low enough to look at the rows
             if debug == 1:
                 print("MOVING TO ROW: " + str(d))
         else:
-            break # finish"""
+            break
 
 ####
 #### NOW MOVE ONTO VERTICALS
@@ -118,6 +135,7 @@ for c in range (0, 9, 1): # create a loop to do this 9 times over
                 #
                 #
                 #
+
     if debug == 1:
         print("Leaving the following numbers as possibles: " + str(possibles))
     if debug == 1:
@@ -136,7 +154,7 @@ for i in range (0, 9, 1):
         print("BLOCK START LOCATION: " + str(x))
     for x in range (x, x + 19, 9): # This is a single block, where x is the starting point
         for c in range (0, 3, 1): # This is to make sure it's just going through 3 places
-            for h in range (1, 10, 1):
+            for h in range (1, 10, 1): # this is to check the range from 1 - 9
                 if str(h) in puzzle[c + x]:
                     notpossibles.append(h)
                     if debug == 1:
