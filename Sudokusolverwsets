@@ -3,11 +3,11 @@
 #########################################################################################
 
 b = [0, 3, 6, 27, 30, 33, 54, 57, 60] # this is the block starting points
-debug = 0 # Debug for printing! (Thanks Dom)
+debug = 1 # Debug for printing! (Thanks Dom)
 n = range(1,10) # Set the range of numbers we are looking for (1 - 9)
 note = [] # empty list to note the places that we find blanks
 options = {} # empyy dictionary to put our options in
-options1 = [] # String to look at options
+options1 = {} # String to look at options
 possibles = set() # possibles as a set
 notpossibles = set() # not possibles as a set
 x = 0 # Define a variable that we can use to count iterations throughout
@@ -49,13 +49,13 @@ def findblanks(): # Find the blanks in the suduko puzzle
             print(note)
             print("- " * 100)
 
-def checkrow(r): # Function to find the numbers that could be on each blank on the horizontal (based just on that line)
+def checkrow(r, a): # Function to find the numbers that could be on each blank on the horizontal (based just on that line) where r is the square and a is the thing to look through (i.e. puzzle or options)
     l = r * 9 # make the function look at the start of the row
     x = 0 # define a variable for the counter
     h = l + 9 # define a variable for the Higher of the range
     y = 1
     while x <= 8: # to make sure we stay on one horizontal line
-        if str(y) not in puzzle[l:h]: # if the number isn't in the line, it's a possible
+        if str(y) not in a[l:h]: # if the number isn't in the line, it's a possible
             possibles.add(n[x])
             x += 1
             y += 1
@@ -66,15 +66,15 @@ def checkrow(r): # Function to find the numbers that could be on each blank on t
     if debug == 2:
         print("the following numbers are not possibles for this row: " + str(notpossibles))
     if debug == 1 or 2:
-        print("the possibilities for this row, based just on this row, are: " + str(possibles))
+        print("the possibles for this row are: " + str(possibles))
     return(possibles)
 
-def checkcolumn(c): # This is to look through all columns and see what the possibilities are
+def checkcolumn(c, a): # This is to look through all columns and see what the possibilities are
     notpossibles = set() # create a not - possibles variable
     possibles = set() # empty the possibles variable
     for c in range (c, 81, 9): # this is the loop to ensure we only look at the verticals together
         for x in range(1, 10, 1): # this loop is each integer we are looking for on the vertical
-            if str(x) in puzzle[c]: # if the x is in the puzzle at the point (c) we are looking at
+            if str(x) in a[c]: # if the x is in the puzzle at the point (c) we are looking at
                 if debug == 2:
                     print(str(x) + " is in the puzzle at point: " + str(c))
                 notpossibles.add(x) # add the number that is in the column to the not possibles
@@ -85,11 +85,9 @@ def checkcolumn(c): # This is to look through all columns and see what the possi
             possibles.add(x) # add the number to the possibles variable
     if debug == 1 or 2:
         print("The possibles for this column are: " + str(possibles))
-    if debug == 1 or 2:
-        print("- " * 100)
     return(possibles)
 
-def checkblock(block): # Function to check the possibilities within a block
+def checkblock(block, a): # Function to check the possibilities within a block
     b = [0, 3, 6, 27, 30, 33, 54, 57, 60] # this is the block starting points
     x = b[block] # this is the variable for the start of the block
     c = 0 # this is the index of the puzzle compared to c
@@ -99,15 +97,17 @@ def checkblock(block): # Function to check the possibilities within a block
     for x in range (x, x + 19, 9): # This is a single block, where x is the starting point
         for c in range (0, 3, 1): # This is to make sure it's just going through 3 places
             for h in range (1, 10, 1): # this is to check the range from 1 - 9
-                if str(h) in puzzle[c + x]:
+                if str(h) in a[c + x]:
                     notpossibles.add(h)
-                    if debug == 1:
+                    if debug == 2:
                         print(str(h) + " is in the puzzle at point: " + str(c + x))
-    print("The following numbers are in this block: " + str(notpossibles))
+    if debug == 2:
+        print("The following numbers are in this block: " + str(notpossibles))
     for x in range (1, 10, 1):
         if x not in notpossibles: # if the number isn't in the not-possibles
             possibles.add(x) # add the number to the possibles variable
-    print("The following numbers are therefore possibles: " + str(possibles))
+    if debug == 1 or 2:
+        print("The possibles for this block are: " + str(possibles))
     return(possibles)
     notpossibles = set()
     possibles = set()
@@ -127,7 +127,7 @@ def checkallrows(): # Function to look through all rows and see what the possibi
         h = l + 9 # define a variable for the Higher of the range
         y = 1
         while x <= 8: # to make sure we stay on one horizontal line
-            if str(y) not in puzzle[l:h]: # if the number isn't in the line, it's a possible
+            if str(y) not in options[l:h]: # if the number isn't in the line, it's a possible
                 possibles.append(n[x])
                 x += 1
                 y += 1
@@ -238,6 +238,41 @@ def resetsets(): # function to reset our possibles and not possibles to blank
     possibles = set()
     notpossibles = set()
 
+def hiddensinglesrowsuseless(): # function to find out if there is only one option available along column
+    #  Check for the row if there are any digits in a but not b
+    for x in range(0, 80, 9):
+        for y in range(0, 9, 1):
+            try:
+                z = x + y
+                print(options[z])
+            except KeyError:
+                x = x # just realised how pointless this whole thing is - it's just finding 0s again; whe ni could use note.
+
+def hiddensinglesrows(x):
+    findrow(x)
+    tolookatlist = [] # this is a temporary list that will give us the bits of options to look at
+    x = 0 # another counter
+    try:
+        findrow(x) # look for numbers in note that are in that row
+        while note[x] < ((findrow(x) * 9) + 9): # while the note is on that same row
+            tolookatlist.append(note[x]) # make a list of
+            print(tolookatlist)
+            print(options)
+            x += 1
+    except:
+        tolookatlist = tolookatlist
+
+        """import itertools
+        note = [0, 1, 2, 3, 6, 9]
+        options = {0 : set([1, 2, 4]), 1 : set([8, 1, 3]), 2 : set([1, 2, 3, 4]), 3 : set([8, 1, 2, 4]), 6 : set([8, 4])}
+        for x in itertools.permutations(note):
+            print(x)
+            for i in x:
+                print(i)"""
+## here we need to make a loop that looks at the options in each row and then looks at the
+## minusing the other options on that row. if len(remaining options) == 1 then we've got a catch
+## map() will take us through the sequence of the row, so it's an if statement to not minus itself
+
 # All functions defined
 #########################################################################################
 #########################################################################################
@@ -245,18 +280,12 @@ def resetsets(): # function to reset our possibles and not possibles to blank
 
 printpuzzle()
 findblanks()
-while iterations < 1:
-    for x in note: # run through the blanks
-        if len(checkrow(findrow(x)) & checkcolumn(findcolumn(x)) & checkblock(findblock(x))) == 1:
-            del puzzle[x]  # delete that piece
-            puzzle.insert(x, (checkrow(findrow(x)) & checkcolumn(findcolumn(x)) & checkblock(findblock(x)))) # then insert the range of numbers it could be (1 - 9)
-        else:
-            options[x] = checkrow(findrow(x)) & checkcolumn(findcolumn(x)) & checkblock(findblock(x)) # Add the options to the options dict
-        resetsets() # reset our possibles and not possibles variables
-        iterations += 1
-while iterations < 20:
-
-    iterations += 1
-
-print(options)
-print(puzzle[1])
+for x in note: # run through the blanks
+    print("Looking at square # :  " + str(x))
+    if len(checkrow(findrow(x), puzzle) & checkcolumn(findcolumn(x), puzzle) & checkblock(findblock(x), puzzle)) == 1: # if there is only one option
+        del puzzle[x]  # delete that piece
+        puzzle.insert(str(x, (checkrow(findrow(x), puzzle) & checkcolumn(findcolumn(x), puzzle) & checkblock(findblock(x), puzzle)))) # then insert the number to the puzzle
+    else:
+        options[x] = checkrow(findrow(x), puzzle) & checkcolumn(findcolumn(x), puzzle) & checkblock(findblock(x), puzzle) # Add the options to the options dict
+    resetsets() # reset our possibles and not possibles variables
+hiddensinglesrows(0)
